@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/categories', [CategoryController::class, 'index']); // select *
 
-Route::get('/test', [TestController::class, 'prova']);
+Route::get('/categories/{category}', [CategoryController::class, 'show']); // select where id = 
 
-Route::get('/posts', [PostController::class, 'index']);
+Route::post('/categories', [CategoryController::class, 'store']); // insert 
+
+Route::put('/categories/{category}', [CategoryController::class, 'update']); // update 
+
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy']); // delete 

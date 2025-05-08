@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostSeeder extends Seeder
 {
@@ -13,11 +14,8 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <=10; $i++) {
-            Post::create([
-                'title' => 'Post '.$i
-            ]);
-        }
-        // insert into posts (title) VALUES ('Post 1');
+        DB::table('posts')->truncate();
+
+        Post::factory()->count(50)->create();
     }
 }
