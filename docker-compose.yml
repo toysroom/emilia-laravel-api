@@ -1,0 +1,29 @@
+services:
+  mariadb:
+    container_name: mariadb-10
+    image: mariadb:11.7.2
+    ports:
+      - 5005:3306
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=1234
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8090:80
+    environment:
+      - PMA_ARBITRARY=1
+
+  app:
+    container_name: laravel-app
+    image: laravel-app:v1
+    build:
+      context: ./
+    ports:
+      - 8000:8000
+    volumes:
+      - ./test:/var/www/html
