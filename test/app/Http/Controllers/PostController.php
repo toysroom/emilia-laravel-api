@@ -4,15 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Services\PostService;
+use App\Services\ThirdPartService;
 
 class PostController extends Controller
 {
+    
+    private PostService $postService;
+    private ThirdPartService $thirdPartService;
+
+    public function __construct(PostService $postService, ThirdPartService $thirdPartService)
+    {
+        $this->postService = $postService;
+        // $this->thirdPartService = new ThirdPartService(env('THIRD_SERVICE_KEY'));
+        $this->thirdPartService = $thirdPartService;
+    }
+    
+    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->category)
+        {
+            $posts = $this->postService->getAllPostsByCategoryID($request->category);
+        }
+        else 
+        {
+            $posts = $this->postService->getAllPosts();
+        }
+
+
+
+
+        return response()->json($posts, 200);
     }
 
     /**

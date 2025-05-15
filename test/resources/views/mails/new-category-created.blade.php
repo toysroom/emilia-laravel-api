@@ -1,0 +1,1 @@
+Nuova categoria {{ $category->name }} creata con id {{ $category->id }}

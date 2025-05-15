@@ -26,8 +26,6 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('categories')->truncate();
-
         foreach($this->categories as $category)
         {
             Category::create([

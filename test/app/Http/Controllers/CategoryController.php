@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Events\NewCategoryCreatedEvent;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
+use App\Models\User;
 
 class CategoryController extends Controller
 {
@@ -14,8 +18,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        $categories = Category::select('id', 'name', 'slug', 'created_at', 'updated_at')->get();
+        return response()->json( new CategoryCollection($categories) );
     }
 
     /**
@@ -27,6 +31,14 @@ class CategoryController extends Controller
             'name' => $storeCategoryRequest->name,
         ]);
 
+        // .... 
+
+        // ..... 
+        
+        $user = User::find(1)->first();
+
+        NewCategoryCreatedEvent::dispatch($newCategory, $user);
+
         return response()->json($newCategory, 201);
     }
 
@@ -35,7 +47,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json($category);
+        return response()->json( new CategoryResource($category));
     }
 
 
@@ -56,5 +68,14 @@ class CategoryController extends Controller
     {
         $category->delete();
         return response()->json(null, 204);
+    }
+
+
+
+
+    public function posts(Category $category)
+    {
+        $category->load('posts');
+        return response()->json($category);
     }
 }
